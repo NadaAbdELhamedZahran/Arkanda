@@ -1,0 +1,84 @@
+<?php
+    session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Arkanda Website</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="bootstrap-4.5.3-dist/css/bootstrap.css">            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src ="jquery-3.5.1.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="CSS/design.css">
+    </head>
+    <body>
+
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        <!-- navigation bar -->
+        <nav>
+            <div class="pages" id="navbar">
+                <a href="home2.php">HOME</a>
+                <a href="documents.php" class="active">DOCUMENTS</a>
+                <!-- <a href="videos_admin.php">ADD Video</a> -->
+                <!-- <a href="sign.php">SIGN UP</a> -->
+                <a href="logout.php">LOG OUT</a>
+            </div>
+        </nav>
+        <p><br></p>
+        <div class="container">
+            <img src="images/6/pexels-photo-273238.jpeg" alt="">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID : </th>
+                        <th>File : </th>
+                        <th>Action : </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    include "config.php";
+                    $sql=$conn->query("SELECT * FROM links");
+                    $sql->execute();
+                    while($row=$sql->fetch()){
+                    ?>
+                    <tr>
+                        <td><?php echo $row['id']?></td>
+                        <td><?php echo $row['filename'] ?></td>
+                        <td>
+                            <a href = "install.php?doc=<?php echo $row['filename']?>" class="fa fa-download"> Download </a>
+                        </td>
+                    </tr>
+                    <?php
+                    }
+                    ?>              
+                </tbody>
+            </table>    
+        </div>
+        <!-- <script>
+            // nav
+            var mynav = document.getElementById("nav");
+
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function() {scrollFunction()};
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        mynav.style.backgroundColor = "lavenderblush";
+                        mynav.style.width = "60%";
+                } 
+                else {
+                        mynav.style.backgroundColor= "red";
+                        mynav.style.width = "60%";
+                }
+            }
+        </script> -->
+        <script src="js/scripts.js"></script>
+        
+    </body>
+</html>

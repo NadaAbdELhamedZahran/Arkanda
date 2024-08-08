@@ -1,0 +1,83 @@
+<?php
+    session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Arkanda Website</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <link rel="stylesheet" href="bootstrap-4.5.3-dist/css/bootstrap.css">            
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src ="jquery-3.5.1.js"></script>
+        <link rel="stylesheet" href="CSS/newdesign.css">
+    </head>
+    <body>
+        <div class="document_all">
+            <img src="images/6/pexels-photo-273238.jpeg" alt="">
+            <div class="document">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    <h2>Add Document</h2>                    
+                    <table>
+                        <tr>
+                            <th>Title : </th>
+                            <td>
+                                <input type="text" name="title" placeholder="enter file title" autocomplete="off" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>File Upload : </th>
+                            <td>
+                                <input type="file" name="file">                                   
+                            </td>
+                        </tr>
+                    </table>
+                    <?php
+                        if( $_SERVER['REQUEST_METHOD'] == "POST" ){                     
+                            $title = $_POST["title"];
+                            $fileName = $_FILES["file"]["name"];
+                            $fileTmpName = $_FILES["file"]["tmp_name"];
+                            $fileSize = $_FILES["file"]["size"];
+                            $fileType = $_FILES["file"]["type"];
+
+                            $filepath = __DIR__ . "/" . "uploaded_doc/";
+                            $fileup = $filepath . $_FILES['file']['name'];
+
+                            if(move_uploaded_file($_FILES['file']['tmp_name'],$fileup)){
+                                echo "done";
+                            }
+                            else{
+                                echo "not yet";
+                            }
+                
+                            try{
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "";
+                                $dbname = "arkanda";
+                                $conn = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
+                                $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+                                $sql = $conn->prepare("INSERT INTO links(name,title,path,extention,size)
+                                VALUES(?,?,?,?,?)");
+                                $sql->execute([$fileName,$title,$fileTmpName,$fileType,$fileSize]);
+
+                                echo "<span style= \" text-align:center; margin: 2% auto; color:#123; font-size:15px; font-weight:bolder; class=\"error\"> file uploaded successfully </span>";
+                            }
+                            catch(PDOException $e){
+                                
+                                echo "<span class=\"error\">  Connection Failed" . $e->getMessage(). "</span>";
+                            }
+                        }    
+                    ?>
+                    <input type="submit" value="Upload">
+                </form>
+            </div>
+        </div>
+        <script src="js/script.js"></script>
+    </body>
+</html>

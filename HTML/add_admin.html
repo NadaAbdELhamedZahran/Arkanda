@@ -1,0 +1,92 @@
+<?php
+    session_start();
+?>
+
+<!DOCTYPE html>
+<html>
+    <head>
+
+            <title>Arkanda Website</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1.0">
+            <link rel="stylesheet" href="bootstrap-4.5.3-dist/css/bootstrap.css">            
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script src ="jquery-3.5.1.js"></script>
+            <link rel="stylesheet" href="CSS/design.css">
+    </head>
+    <body>
+    
+        <div class="sign_ad">
+            <img src="images/6/pexels-photo-276508.jpeg" alt="">
+            <div class="sign_up_ad">
+                <form action="" method="POST">
+                    <h2>SIGN UP</h2>                    
+                    <table>
+                        <tr>
+                            <th>Name : </th>
+                            <td>
+                                <input type="text" name="username" placeholder="enter username" autocomplete="off" required>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Password : </th>
+                            <td>
+                                <input type="password" name="pass" placeholder="enter your password">
+                               
+                            </td>
+                        </tr>
+    
+                    </table>
+                    <?php    
+                        if( $_SERVER['REQUEST_METHOD'] == "POST" ){                     
+                            $name=$_POST['username'];
+                            $pass =$_POST['pass'] ;    
+                                                    
+                            try{
+                                $servername = "localhost";
+                                $username = "root";
+                                $password = "";
+                                $dbname = "arkanda";
+                                $conn = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
+                                $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+                                $sql = $conn->prepare("INSERT INTO admins(admin_name,password)
+                                VALUES(?,?)");
+                                $sql->execute([$name,$pass]);
+                                
+                                echo "<span style= \" text-align:center; margin: 2% auto; color:#123; font-size:15px; font-weight:bolder; class=\"error\"> user added successfully </span>";
+                            }
+                            catch(PDOException $e){
+                                
+                                echo "<span class=\"error\">  Connection Failed" . $e->getMessage(). "</span>";
+                            }
+                        }    
+                    ?>
+                    <input type="submit" value="SIGN IN">
+                </form>
+            </div>
+        </div>
+        <script src="js/script.js"></script>
+        <script>
+            // nav
+            var mynav = document.getElementById("nav");
+
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function() {scrollFunction()};
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                        mynav.style.backgroundColor = "lavenderblush";
+                        mynav.style.width = "60%";
+                } 
+                else {
+                        mynav.style.backgroundColor= "white";
+                        mynav.style.width = "60%";
+                }
+            }
+        </script>
+    </body>
+</html>
